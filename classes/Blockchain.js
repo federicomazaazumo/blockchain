@@ -1,15 +1,18 @@
-import Block from "./Block";
+const Block = require("../classes/Block")
 
 class Blockchain {
   constructor() {
     this.blockchain = [this.startGenesisBlock()];
+    this.difficulty = 2
   }
 
-  addBlock(Block) {
+  addBlock(block) {
     block.precedingHash = this.obtainLatestBlock().hash;
     block.proofOfWork(this.difficulty);
 
     this.blockchain.push(Block);
+
+    return [block.hash, block.data, block.nonce]
   }
 
   checkChainValidity() {
@@ -24,32 +27,13 @@ class Blockchain {
     return true;
   }
 
-  computeHash() {
-    return SHA256(
-      this.index +
-        this.precedingHash +
-        this.timestamp +
-        JSON.stringify(this.data) +
-        this.nonce
-    ).toString();
-  }
-
   obtainLatestBlock() {
     return this.blockchain[this.blockchain.length - 1];
   }
 
-  proofOfWork(difficulty) {
-    while (
-      this.hash.substring(0, difficulty) !== Array(difficulty + 1).join("0")
-    ) {
-      this.nonce++;
-      this.hash = this.computeHash();
-    }
-  }
-
   startGenesisBlock() {
-    return new Block(0, "01/01/2020", "Initial Block in the Chain", "0");
+    return new Block(0, Date.now(), "Atix Labs Blockchain Line Logger Implementation", "0");
   }
 }
 
-export default Blockchain;
+module.exports = Blockchain;
