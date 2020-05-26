@@ -15,7 +15,8 @@ class Block {
       this.index +
         this.precedingHash +
         this.timestamp +
-        JSON.stringify(this.data)+this.nonce
+        JSON.stringify(this.data) +
+        this.nonce
     ).toString();
   }
 

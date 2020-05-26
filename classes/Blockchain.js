@@ -1,9 +1,9 @@
-const Block = require("../classes/Block")
+const Block = require("../classes/Block");
 
 class Blockchain {
   constructor() {
     this.blockchain = [this.startGenesisBlock()];
-    this.difficulty = 2
+    this.difficulty = 2;
   }
 
   addBlock(block) {
@@ -12,7 +12,7 @@ class Blockchain {
 
     this.blockchain.push(Block);
 
-    return [block.hash, block.data, block.nonce]
+    return [block.hash, block.data, block.nonce];
   }
 
   checkChainValidity() {
@@ -32,7 +32,12 @@ class Blockchain {
   }
 
   startGenesisBlock() {
-    return new Block(0, Date.now(), "Atix Labs Blockchain Line Logger Implementation", "0");
+    return new Block(
+      0,
+      Date.now(),
+      "Atix Labs Blockchain Line Logger Implementation",
+      "0"
+    );
   }
 }
 
