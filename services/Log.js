@@ -1,33 +1,29 @@
 const Block = require("../classes/Block")
 const Blockchain = require("../classes/Blockchain")
 
-const path = require("path");
 const fastcsv = require('fast-csv');
 const fileSystem = require("fs");
+const path = require("path");
+const utilities = require('util');
 
 const filePath = path.join(__dirname, "../shared/atix.csv");
 const atixchain = new Blockchain()
 
 atixchain.startGenesisBlock()
 
-const readFile = () => {
-    const fileStream = fileSystem.createReadStream(filePath)
-
-    fileStream.pipe(fastcsv.parse({ headers: false }))
-    .on('error', error => console.error(error))
-    .on('data', row => console.log(row))
-    .on('end', rowCount => console.log(`Parsed ${rowCount} rows`));
-};
-
 const writeFile = (data) => {
-    const fileStream = fileSystem.createWriteStream(filePath)
-    const formater = fastcsv.format({ headers: false })
+    try { 
+        const stream = fileSystem.createWriteStream(filePath, { flags: 'a', includeEndRowDelimiter: true })
+    const formater = fastcsv.format({ headers: true })
 
     const line = atixchain.addBlock(new Block(atixchain.length + 1, Date.now(), data))
 
-    formater.pipe(fileStream).on('end', process.exit);
+    formater.pipe(stream).on('end', process.exit);
     formater.write([line]);
     formater.end();
+} catch(error) { 
+    console.log(error) 
+}
 };
 
-module.exports = { readFile, writeFile };
+module.exports = { writeFile };

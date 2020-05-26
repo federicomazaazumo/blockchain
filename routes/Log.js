@@ -1,22 +1,14 @@
 const express = require("express");
-const { readFile, writeFile } = require("../services/Log");
+
+const { writeFile } = require("../services/Log");
 
 const router = express.Router();
 
-router.use((request, response, next) => {
-  console.log(request.method, request.url);
+router.post("/logger", async (request, response) => {
+  const data = request.body.data
 
-  next();
-});
-
-router.get("/logger", (request, response) => {
-  readFile();
-  response.send("im the home page!");
-});
-
-router.get("/loggers", (request, response) => {
-  writeFile("Hola");
-  response.send("processing the login form!");
+  await writeFile(data);
+  response.send("Block added to the blockchain successfully!");
 });
 
 module.exports = router;
